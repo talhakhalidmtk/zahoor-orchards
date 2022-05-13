@@ -1,0 +1,1 @@
+web: gunicorn zahoor_orchards.wsgi --log-file -

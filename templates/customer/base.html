@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Zahoor Orchards{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicons -->
+    <link href="{% static 'customer/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'customer/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+    <!-- Bootstrap CSS File -->
+    <link href="{% static 'customer/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="{% static 'customer/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'customer/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'customer/lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'customer/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="{% static 'customer/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    {% url 'customer:index' as index_url %}
+    {% url 'admin_panel:index' as admin_index_url %}
+    {% url 'customer:agent' as agent_url %}
+    {% url 'customer:about' as about_url %}
+    {% url 'customer:contact' as contact_url %}
+    {% url 'customer:property' as property_url %}
+    {% url 'customer:property-single' as property_single_url %}
+    {% url 'customer:sign-in' as sign_in_url %}
+    {% url 'customer:sign-up' as sign_up_url %}
+    {% url 'admin_panel:logout' as logout_url %}
+
+    {% include 'customer/navbar.html' %}
+    <main>
+        {% block content %} {% endblock %}
+    </main>
+    {% include 'customer/footer.html' %}
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <div id="preloader"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="{% static 'customer/lib/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'customer/lib/jquery/jquery-migrate.min.js' %}"></script>
+    <script src="{% static 'customer/lib/popper/popper.min.js' %}"></script>
+    <script src="{% static 'customer/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'customer/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'customer/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'customer/lib/scrollreveal/scrollreveal.min.js' %}"></script>
+    <!-- Contact Form JavaScript File -->
+    <!-- <script src="{% static 'customer/contactform/contactform.js' %}"></script> -->
+
+    <!-- Template Main Javascript File -->
+    <script src="{% static 'customer/js/main.js' %}"></script>
+
+
+</body>
