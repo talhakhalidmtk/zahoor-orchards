@@ -1,5 +1,4 @@
 from django.db import models
-from picklefield.fields import PickledObjectField
 
 class Client(models.Model):  
     name = models.CharField(max_length=30, null=True)
@@ -28,7 +27,6 @@ class File(models.Model):
     client = models.ForeignKey(Client, max_length=30, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, max_length=30, on_delete=models.CASCADE)
     status = models.CharField(max_length=30)
-    payment = PickledObjectField()
 
     def __str__(self):
         return self.file
