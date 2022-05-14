@@ -10,15 +10,29 @@
         <h4 class="fw-bold "><span class="text-muted fw-light">Property Section /</span> Property</h4>
 
         <button type="button" class="btn btn-outline-dark"><a data-bs-toggle="collapse" href="#add_property"
-                aria-expanded="false">Add Property</a></button>
-
+                aria-expanded="false">{% if request.path == property_url %} Add Property {% else %} Update Property
+                {% endif %}</a></button>
         <hr class="my-3" />
+
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
         <form id="property_form" action="" method="post">
             {% csrf_token %}
-            <div class="row collapse" id="add_property">
+            <div class="row  {% if request.path == property_url %} collapse
+        {% endif %}" id="add_property">
                 <div class="col-md-6 mx-auto">
                     <div class="card mb-4">
-                        <h5 class="card-header"><strong>Add Property</strong></h5>
+                        <h5 class="card-header"><strong>{% if request.path == property_url %} Add Property {% else %}
+                                Update Property
+                                {% endif %}</strong></h5>
                         <div class="card-body">
                             {% for field in property_form %}
                             <div class="mb-1">
@@ -58,15 +72,7 @@
                             <td>{{forloop.counter}}</td>
 
                             <td><strong>{{property.plot}}</strong></td>
-                            {% if messages %}
-                            {% for message in messages %}
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                {{message}}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                            {% endfor %}
-                            {% endif %}
+
                             <td>{{property.size}}</td>
                             <td>{{property.block}}</td>
                             <td>{{property.amount}}</td>
@@ -82,8 +88,10 @@
                                         <form action="{% url 'admin_panel:deleteProperty' property.plot %}"
                                             method="post" id="{{property.plot}}">
                                             {% csrf_token %}
-                                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                                    class="bx bx-edit-alt me-1"></i> Edit</a>
+                                            <a class="dropdown-item"
+                                                href="{% url 'admin_panel:updateProperty' property.plot %}"><i
+                                                    class="bx bx-edit-alt me-1"></i>
+                                                Edit</a>
                                             <a class="dropdown-item" href="javascript:void(0);"
                                                 onclick="document.getElementById('{{property.plot}}').submit()"><i
                                                     class="bx bx-trash me-1"></i> Delete</a>
@@ -101,5 +109,6 @@
 
 
     </div>
+
     <!-- / Content -->
     {% endblock %}

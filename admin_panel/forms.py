@@ -1,7 +1,7 @@
 from admin_panel.models import Client, Property, File
 from django import forms
 
-school_name =(
+status =(
     ("Active", "Active"),
 )
 
@@ -20,20 +20,32 @@ file_status =(
     ("Canceled", "Canceled"),
 )
 
-class ClientForm(forms.Form):
-    name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Name...'}))
-    guardian = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Guardian\'s Name ...'}))
-    contact = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control','id':'contact', 'placeholder':'Contact Number...', 'pattern':"[0-9]{4}-[0-9]{7}"}))
-    cnic = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control','id':'cnic' ,'placeholder':'CNIC...', 'pattern':"[0-9]{5}-[0-9]{7}-[0-9]{1}"}))
-    status = forms.ChoiceField(choices = school_name, label="", initial='', widget=forms.Select(attrs={"class":'form-control', 'placeholder':'Status...'}), required=True)
+class ClientForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ('name', 'guardian', 'contact', 'cnic', 'status')
+    def __init__(self, *args, **kwargs):
+        super(ClientForm, self).__init__(*args, **kwargs)
+        self.fields['status'] = forms.ChoiceField(label="Status...", choices=status)
+        self.fields['contact'].widget.attrs.update({'pattern':"[0-9]{4}-[0-9]{7}"})
+        self.fields['cnic'].widget.attrs.update({'pattern':"[0-9]{5}-[0-9]{7}-[0-9]{1}"})
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({'id': field})
+            self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..." 
 
-class PropertyForm(forms.Form):
-    plot = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Plot Number...'}))
-    size = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Size...'}))
-    block = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Block...'}))
-    amount = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Amount...'}))
-    category = forms.ChoiceField(choices = category, label="", initial='', widget=forms.Select(attrs={"class":'form-control', 'placeholder':'Category...'}), required=True)
-    status = forms.ChoiceField(choices = property_status, label="", initial='', widget=forms.Select(attrs={"class":'form-control', 'placeholder':'Status...'}), required=True)
+class PropertyForm(forms.ModelForm):
+    class Meta:
+        model = Property
+        fields = ('plot', 'size', 'block', 'amount', 'category', 'status')
+    def __init__(self, *args, **kwargs):
+        super(PropertyForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.ChoiceField(label="Category...", choices=category)
+        self.fields['status'] = forms.ChoiceField(label="Status...", choices=property_status)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({'id': field})
+            self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..."
 
 class FileForm(forms.ModelForm):
     class Meta:
@@ -47,6 +59,7 @@ class FileForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
             self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..."
+            self.fields[field].widget.attrs.update({'id': field})
 
 
     

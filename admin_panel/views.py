@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views import View
 from admin_panel.models import Client, Property, File
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
@@ -48,6 +49,20 @@ class ClientViewDelete(RedirectView):
         Client.objects.get(cnic=kwargs['cnic']).delete()
         return super().get_redirect_url(*args, **kwargs)
 
+def updateClient(request, cnic):
+    client = Client.objects.get(cnic=cnic)
+    form = ClientForm(instance=client)
+    context={'client_form': form, 'client_data':Client.objects.all()}
+
+    if request.method == 'POST':
+        form = ClientForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Updated Successfully')
+            return redirect('/admin/clients')
+
+    return render(request, 'admin/client.html', context)
+
 
 class PropertyView(TemplateView):
     template_name = "admin/property.html"
@@ -79,6 +94,20 @@ class PropertyViewDelete(RedirectView):
         url = self.request.path_info
         Property.objects.get(plot=kwargs['plot']).delete()
         return super().get_redirect_url(*args, **kwargs)
+
+def updateProperty(request, plot):
+    property = Property.objects.get(plot=plot)
+    form = PropertyForm(instance=property)
+    context={'property_form': form, 'property_data':Property.objects.all()}
+
+    if request.method == 'POST':
+        form = PropertyForm(request.POST, instance=property)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Updated Successfully')
+            return redirect('/admin/property')
+
+    return render(request, 'admin/property.html', context)
 
 
 class FileView(TemplateView):

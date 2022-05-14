@@ -10,17 +10,29 @@
         <h4 class="fw-bold "><span class="text-muted fw-light">Client Section /</span> Client</h4>
 
         <button type="button" class="btn btn-outline-dark"><a data-bs-toggle="collapse" href="#add_client"
-                aria-expanded="false">Add Client</a></button>
+                aria-expanded="false">{% if request.path == client_url %} Add Client {% else %} Update Client
+                {% endif %}</a></button>
 
         <hr class="my-3" />
 
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
 
         <form id="client_form" action="" method="post">
             {% csrf_token %}
-            <div class="row collapse" id="add_client">
+            <div class="row {% if request.path == client_url %} collapse
+        {% endif %}" id="add_client">
                 <div class="col-md-6 mx-auto">
                     <div class="card mb-4">
-                        <h5 class="card-header"><strong>Add Client</strong></h5>
+                        <h5 class="card-header"><strong>{% if request.path == client_url %} Add Client {% else %}
+                                Update Client
+                                {% endif %}</strong></h5>
                         <div class="card-body">
                             {% for field in client_form %}
                             <div class="mb-1">
@@ -72,15 +84,7 @@
                             <td>{{forloop.counter}}</td>
 
                             <td><strong>{{client.name}}</strong></td>
-                            {% if messages %}
-                            {% for message in messages %}
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                {{message}}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                            </div>
-                            {% endfor %}
-                            {% endif %}
+
                             <td>{{client.guardian}}</td>
                             <td>{{client.contact}}</td>
                             <td>{{client.cnic}}</td>
@@ -95,7 +99,8 @@
                                         <form action="{% url 'admin_panel:deleteClient' client.cnic %}" method="post"
                                             id="{{client.cnic}}">
                                             {% csrf_token %}
-                                            <a class="dropdown-item" href="javascript:void(0);"><i
+                                            <a class="dropdown-item"
+                                                href="{% url 'admin_panel:updateClient' client.cnic %}"><i
                                                     class="bx bx-edit-alt me-1"></i> Edit</a>
                                             <a class="dropdown-item" href="javascript:void(0);"
                                                 onclick="document.getElementById('{{client.cnic}}').submit()"><i
