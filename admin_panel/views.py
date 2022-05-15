@@ -19,7 +19,7 @@ class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
 
-class ClientView(TemplateView):
+class ClientView(SuperuserRequiredMixin, LoginRequiredMixin, TemplateView):
     template_name = "admin/client.html"
 
     def get_context_data(self, **kwargs):
@@ -64,7 +64,7 @@ def updateClient(request, cnic):
     return render(request, 'admin/client.html', context)
 
 
-class PropertyView(TemplateView):
+class PropertyView(SuperuserRequiredMixin, LoginRequiredMixin, TemplateView):
     template_name = "admin/property.html"
 
     def get_context_data(self, **kwargs):
@@ -110,7 +110,7 @@ def updateProperty(request, plot):
     return render(request, 'admin/property.html', context)
 
 
-class FileView(TemplateView):
+class FileView(SuperuserRequiredMixin, LoginRequiredMixin, TemplateView):
     template_name = "admin/file.html"
 
     def get_context_data(self, **kwargs):
