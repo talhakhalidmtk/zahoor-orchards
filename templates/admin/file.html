@@ -10,8 +10,9 @@
     <h4 class="fw-bold "><span class="text-muted fw-light">File Section /</span> File</h4>
 
     <button type="button" class="btn btn-outline-dark"><a data-bs-toggle="collapse" href="#add_file"
-        aria-expanded="false">{% if request.path == file_url %} Create File {% else %} Add Payment
-        {% endif %}</a></button>
+        aria-expanded="false">{% if request.path == file_url %} Create File {% elif request.path == payment_url %} Add
+        Payment
+        {% else %} Update File {% endif %}</a></button>
     <button type="button" class="btn btn-outline-dark">Bulk Insert</button>
 
     <hr class="my-3" />
@@ -31,24 +32,16 @@
         {% endif %}" id="add_file">
         <div class="col-md-6 mx-auto">
           <div class="card mb-4">
-            <h5 class="card-header"><strong>{% if request.path == file_url %} Add Client {% else %}
-                Add Payment
+            <h5 class="card-header"><strong>{% if request.path == file_url %} Add File
+                {% elif request.path == payment_url %} Add Payment {% else %}
+                Update File
                 {% endif %}</strong></h5>
             <div class="card-body">
-              {% if request.path == file_url %}
               {% for field in file_form %}
               <div class="mb-1">
                 {{ field }}
               </div>
               {% endfor %}
-              {% else %}
-              {% for field in payment_form %}
-              <div class="mb-1">
-                {{ field }}
-              </div>
-              {% endfor %}
-              {% endif %}
-
               <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
               <button type="" class="btn btn-outline-danger">CLEAR</button>
             </div>
@@ -102,7 +95,8 @@
                   <div class="dropdown-menu">
                     <form action="{% url 'admin_panel:deleteFile' file.file %}" method="post" id="{{file.file}}">
                       {% csrf_token %}
-                      <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                      <a class="dropdown-item" href="{% url 'admin_panel:updateFile' file.file %}"><i
+                          class="bx bx-edit-alt me-1"></i> Edit</a>
                       <a class="dropdown-item" href="javascript:void(0);"
                         onclick="document.getElementById('{{file.file}}').submit()"><i class="bx bx-trash me-1"></i>
                         Delete</a>
@@ -128,8 +122,8 @@
                   <tbody class="table-border-bottom-0">
 
                     {% for payment in file.payment %}
-                    {{payment.1|add:0}}
-                    {{sum|add:payment.1}}
+                    <!-- {{payment.1|add:0}}
+                    {{sum|add:payment.1}} -->
                     <tr>
                       <td>{{forloop.counter}}</td>
                       <td>{{payment.0}}</td>

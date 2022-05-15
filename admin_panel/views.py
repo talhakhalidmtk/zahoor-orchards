@@ -141,7 +141,7 @@ class FileViewDelete(RedirectView):
 def updatePayment(request, file):
     property = File.objects.get(file=file)
     form = PaymentForm(instance=property)
-    context={'payment_form': form, 'file_data':File.objects.all()}
+    context={'file_form': form, 'file_data':File.objects.all()}
 
     if request.method == 'POST':
         form = PaymentForm(request.POST, instance=property)
@@ -150,5 +150,22 @@ def updatePayment(request, file):
             property.save()
             messages.info(request, 'Added Successfully')
             return redirect('/admin/file')
+
+    return render(request, 'admin/file.html', context)
+
+def updateFile(request, file):
+    file_obj = File.objects.get(file=file)
+    form = FileForm(instance=file_obj)
+    context={'file_form': form, 'file_data':File.objects.all()}
+
+    if request.method == 'POST':
+        form = FileForm(request.POST, instance=file_obj)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Updated Successfully')
+            return redirect('/admin/file')
+        else:
+            print(form.errors.as_data())
+        
 
     return render(request, 'admin/file.html', context)
