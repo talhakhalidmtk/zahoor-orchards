@@ -10,14 +10,15 @@
     <h4 class="fw-bold "><span class="text-muted fw-light">File Section /</span> File</h4>
 
     <button type="button" class="btn btn-outline-dark"><a data-bs-toggle="collapse" href="#add_file"
-        aria-expanded="false">Create File</a></button>
+        aria-expanded="false">{% if request.path == file_url %} Create File {% else %} Add Payment
+        {% endif %}</a></button>
     <button type="button" class="btn btn-outline-dark">Bulk Insert</button>
 
     <hr class="my-3" />
 
     {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
+    <div class="alert alert-success alert-dismissible" role="alert">
       {{message}}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -26,16 +27,28 @@
 
     <form id="file_form" action="" method="post">
       {% csrf_token %}
-      <div class="row collapse" id="add_file">
+      <div class="row {% if request.path == file_url %} collapse
+        {% endif %}" id="add_file">
         <div class="col-md-6 mx-auto">
           <div class="card mb-4">
-            <h5 class="card-header"><strong>Create File</strong></h5>
+            <h5 class="card-header"><strong>{% if request.path == file_url %} Add Client {% else %}
+                Add Payment
+                {% endif %}</strong></h5>
             <div class="card-body">
+              {% if request.path == file_url %}
               {% for field in file_form %}
               <div class="mb-1">
                 {{ field }}
               </div>
               {% endfor %}
+              {% else %}
+              {% for field in payment_form %}
+              <div class="mb-1">
+                {{ field }}
+              </div>
+              {% endfor %}
+              {% endif %}
+
               <button type="submit" class="btn btn-outline-primary">SUBMIT</button>
               <button type="" class="btn btn-outline-danger">CLEAR</button>
             </div>
@@ -93,14 +106,15 @@
                       <a class="dropdown-item" href="javascript:void(0);"
                         onclick="document.getElementById('{{file.file}}').submit()"><i class="bx bx-trash me-1"></i>
                         Delete</a>
-                      <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Add
+                      <a class="dropdown-item" href="{% url 'admin_panel:updatePayment' file.file %}"><i
+                          class="bx bx-edit-alt me-1"></i> Add
                         Payment</a>
                     </form>
                   </div>
                 </div>
               </td>
             </tr>
-
+            {% with sum=0 %}
             <tr class="collapse" id="F{{file.plot}}">
               <td colspan="12">
                 <table class="table table-striped table-hover">
@@ -113,17 +127,22 @@
                   </thead>
                   <tbody class="table-border-bottom-0">
 
+                    {% for payment in file.payment %}
+                    {{payment.1|add:0}}
+                    {{sum|add:payment.1}}
                     <tr>
-                      <td>{{data}}</td>
-                      <td>{{data}}</td>
-                      <td>{{data}}</td>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{payment.0}}</td>
+                      <td>{{payment.1}}</td>
                     </tr>
+
+                    {% endfor %}
 
                   </tbody>
                   <tfoot class="table-border-bottom-0">
                     <tr>
                       <td colspan="2"><strong>Total</strong></td>
-                      <td><strong>-</strong></td>
+                      <td><strong>{{sum}}</strong></td>
                     </tr>
                     <tr>
                       <td colspan="2"><strong>Remaining</strong></td>
@@ -134,8 +153,7 @@
               </td>
 
             </tr>
-
-
+            {% endwith %}
             {% endfor %}
 
           </tbody>

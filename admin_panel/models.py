@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 class Client(models.Model):  
     name = models.CharField(max_length=30, null=True)
@@ -27,6 +28,12 @@ class File(models.Model):
     client = models.ForeignKey(Client, max_length=30, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, max_length=30, on_delete=models.CASCADE)
     status = models.CharField(max_length=30)
+    payment = ArrayField(
+        ArrayField(
+            models.CharField(max_length=30, blank=True),
+            size=3,
+        ),
+    )
 
     def __str__(self):
         return self.file

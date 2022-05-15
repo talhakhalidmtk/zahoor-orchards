@@ -61,5 +61,20 @@ class FileForm(forms.ModelForm):
             self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..."
             self.fields[field].widget.attrs.update({'id': field})
 
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ('file', 'client','property')
+    def __init__(self, *args, **kwargs):
+        super(PaymentForm, self).__init__(*args, **kwargs)
+        self.fields['client'].empty_label = 'Client...'
+        self.fields['property'].empty_label = 'Plot - Size - Block - Category...'
+        self.fields['payment_details'] = forms.CharField()
+        self.fields['amount'] = forms.CharField()
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..."
+            self.fields[field].widget.attrs.update({'id': field})
+
 
     

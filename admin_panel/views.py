@@ -7,7 +7,7 @@ from admin_panel.models import Client, Property, File
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
 
-from admin_panel.forms import ClientForm, PropertyForm, FileForm
+from admin_panel.forms import ClientForm, PropertyForm, FileForm, PaymentForm
 
 def index(request: HttpRequest) -> HttpResponse:
     return render(request, "admin/index.html")
@@ -122,14 +122,12 @@ class FileView(TemplateView):
     def post(self, request):
         form = FileForm(request.POST)
         if form.is_valid():
-            # cl = form.cleaned_data['client']
-            # messages.info(request, cl.cnic)
             fi = form.cleaned_data['file']
             ag = form.cleaned_data['agent']
             cl = Client.objects.get(name=form.cleaned_data['client'].name, cnic = form.cleaned_data['client'].cnic)
             pr = Property.objects.get(plot=form.cleaned_data['property'].plot)
             st = form.cleaned_data['status']
-            property = File(file=fi, agent=ag, client=cl, property=pr, status = st)
+            property = File(file=fi, agent=ag, client=cl, property=pr, status = st, payment = [])
             property.save()
             return HttpResponseRedirect(self.request.path_info)
 
@@ -139,3 +137,18 @@ class FileViewDelete(RedirectView):
         url = self.request.path_info
         File.objects.get(file=kwargs['file']).delete()
         return super().get_redirect_url(*args, **kwargs)
+
+def updatePayment(request, file):
+    property = File.objects.get(file=file)
+    form = PaymentForm(instance=property)
+    context={'payment_form': form, 'file_data':File.objects.all()}
+
+    if request.method == 'POST':
+        form = PaymentForm(request.POST, instance=property)
+        if form.is_valid():
+            property.payment.append([form.cleaned_data['payment_details'],form.cleaned_data['amount']]) 
+            property.save()
+            messages.info(request, 'Added Successfully')
+            return redirect('/admin/file')
+
+    return render(request, 'admin/file.html', context)

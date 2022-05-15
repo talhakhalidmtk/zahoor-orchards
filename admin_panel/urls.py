@@ -19,6 +19,7 @@ urlpatterns = [
 
     path("file/", views.FileView.as_view(), name="file"),
     path("deletefile/<str:file>/", views.FileViewDelete.as_view(), name="deleteFile"),
+    path("updatepayment/<str:file>", views.updatePayment, name="updatePayment"),
 
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 ]
