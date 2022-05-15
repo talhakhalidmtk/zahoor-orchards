@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a&6hxo7b1&wuz#z55^4-23to^#3#(%ei=)(ph&$*tv&70e2-!*'
+# SECRET_KEY = 'django-insecure-a&6hxo7b1&wuz#z55^4-23to^#3#(%ei=)(ph&$*tv&70e2-!*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -134,7 +134,7 @@ LOGIN_REDIRECT_URL = "customer:index"
 LOGOUT_REDIRECT_URL = "customer:index"
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SERVER_MODE=True
 
 import dj_database_url 
