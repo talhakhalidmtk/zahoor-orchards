@@ -134,7 +134,7 @@ LOGIN_REDIRECT_URL = "customer:index"
 LOGOUT_REDIRECT_URL = "customer:index"
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SERVER_MODE=True
 
 import dj_database_url 
