@@ -8,12 +8,13 @@ from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
 
 from admin_panel.forms import ClientForm, PropertyForm, FileForm, PaymentForm, AgentForm
+from django.contrib.auth.decorators import user_passes_test
 
-
-
+@user_passes_test(lambda u: u.is_superuser)
 def index(request: HttpRequest) -> HttpResponse:
     return render(request, "admin/index.html")
 
+@user_passes_test(lambda u: u.is_superuser)
 def account(request: HttpRequest) -> HttpResponse:
     return render(request, "admin/account.html")
 
@@ -21,9 +22,7 @@ class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
 
-
-
-class AgentView(TemplateView):
+class AgentView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
     template_name = "admin/agent.html"
 
     def get_context_data(self, **kwargs):
@@ -40,13 +39,14 @@ class AgentView(TemplateView):
             messages.info(request, form.errors)
         return HttpResponseRedirect(self.request.path_info)
 
-class AgentViewDelete(RedirectView):
+class AgentViewDelete(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
     url = "/admin/agents"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
         Agent.objects.get(cnic=kwargs['cnic']).delete()
         return super().get_redirect_url(*args, **kwargs)
 
+@user_passes_test(lambda u: u.is_superuser)
 def updateAgent(request, cnic):
     agent = Agent.objects.get(cnic=cnic)
     form = AgentForm(instance=agent)
@@ -62,7 +62,7 @@ def updateAgent(request, cnic):
     return render(request, 'admin/agent.html', context)
 
 
-class ClientView(TemplateView):
+class ClientView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
     template_name = "admin/client.html"
 
     def get_context_data(self, **kwargs):
@@ -85,13 +85,14 @@ class ClientView(TemplateView):
             messages.info(request, 'This User already exists!')
         return HttpResponseRedirect(self.request.path_info)
 
-class ClientViewDelete(RedirectView):
+class ClientViewDelete(RedirectView, LoginRequiredMixin, SuperuserRequiredMixin):
     url = "/admin/clients"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
         Client.objects.get(cnic=kwargs['cnic']).delete()
         return super().get_redirect_url(*args, **kwargs)
 
+@user_passes_test(lambda u: u.is_superuser)
 def updateClient(request, cnic):
     client = Client.objects.get(cnic=cnic)
     form = ClientForm(instance=client)
@@ -107,7 +108,7 @@ def updateClient(request, cnic):
     return render(request, 'admin/client.html', context)
 
 
-class PropertyView(TemplateView):
+class PropertyView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
     template_name = "admin/property.html"
 
     def get_context_data(self, **kwargs):
@@ -124,13 +125,14 @@ class PropertyView(TemplateView):
             messages.info(request, 'This Property already exists!')
         return HttpResponseRedirect(self.request.path_info)
 
-class PropertyViewDelete(RedirectView):
+class PropertyViewDelete(RedirectView, LoginRequiredMixin, SuperuserRequiredMixin):
     url = "/admin/property"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
         Property.objects.get(plot=kwargs['plot']).delete()
         return super().get_redirect_url(*args, **kwargs)
 
+@user_passes_test(lambda u: u.is_superuser)
 def updateProperty(request, plot):
     property = Property.objects.get(plot=plot)
     form = PropertyForm(instance=property)
@@ -146,7 +148,7 @@ def updateProperty(request, plot):
     return render(request, 'admin/property.html', context)
 
 
-class FileView(TemplateView):
+class FileView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
     template_name = "admin/file.html"
 
     def get_context_data(self, **kwargs):
@@ -170,7 +172,6 @@ class FileView(TemplateView):
             messages.info(request, 'ERROR!')
         return HttpResponseRedirect(self.request.path_info)
         
-        
 def countTotal():
     val = File.objects.all().order_by('file')
     re = []
@@ -182,18 +183,14 @@ def countTotal():
     print(re)
     return re
 
-
-
-
-
-
-class FileViewDelete(RedirectView):
+class FileViewDelete(RedirectView, LoginRequiredMixin, SuperuserRequiredMixin):
     url = "/admin/file"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
         File.objects.get(file=kwargs['file']).delete()
         return super().get_redirect_url(*args, **kwargs)
 
+@user_passes_test(lambda u: u.is_superuser)
 def updatePayment(request, file):
     property = File.objects.get(file=file)
     form = PaymentForm(instance=property)
@@ -209,6 +206,7 @@ def updatePayment(request, file):
 
     return render(request, 'admin/file.html', context)
 
+@user_passes_test(lambda u: u.is_superuser)
 def updateFile(request, file):
     file_obj = File.objects.get(file=file)
     form = FileForm(instance=file_obj)

@@ -15,8 +15,8 @@ SECRET_KEY = 'django-insecure-a&6hxo7b1&wuz#z55^4-23to^#3#(%ei=)(ph&$*tv&70e2-!*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['zahoor-orchards.herokuapp.com']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['zahoor-orchards.herokuapp.com']
+# ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -96,6 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 
 # Internationalization
