@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a&6hxo7b1&wuz#z55^4-23to^#3#(%ei=)(ph&$*tv&70e2-!*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['zahoor-orchards.herokuapp.com']
 # ALLOWED_HOSTS = ['*']
@@ -134,7 +134,7 @@ LOGIN_URL = "customer:sign-in"
 LOGIN_REDIRECT_URL = "customer:index"
 LOGOUT_REDIRECT_URL = "customer:index"
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SERVER_MODE=True
 
