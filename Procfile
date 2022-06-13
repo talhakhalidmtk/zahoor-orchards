@@ -1,1 +1,1 @@
-web: gunicorn zahoor-orchards.wsgi --log-file -
+web: gunicorn zahoor_orchards.wsgi --log-file -
