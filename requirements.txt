@@ -148,7 +148,6 @@ python-dotenv==0.19.0
 python-jsonrpc-server==0.4.0
 python-language-server==0.36.2
 PyTweening==1.0.3
-pytz==2020.5
 pywin32==304
 pywin32-ctypes==0.2.0
 pywinpty==0.5.7
