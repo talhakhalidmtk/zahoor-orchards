@@ -7,7 +7,7 @@ app_name="customer"
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('about/', views.about, name="about"),
+    path('about/', views.About.as_view(), name="about"),
     path('agent/', views.agent, name="agent"),
     path('contact/', views.contact, name="contact"),
     path('property/', views.property, name="property"),
@@ -17,6 +17,5 @@ urlpatterns = [
         auth_views.LoginView.as_view(template_name="customer/sign-in.html"),
         name="sign-in",
     ),
-    # path("sign-up", auth_views.LogoutView.as_view(), name="sign-up"),
     
 ]

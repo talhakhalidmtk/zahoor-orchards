@@ -18,9 +18,6 @@ DEBUG = True
 # ALLOWED_HOSTS = ['zahoor-orchards.herokuapp.com']
 ALLOWED_HOSTS = ['*']
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,9 +25,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'customer.apps.CustomerConfig',
     'admin_panel.apps.AdminPanelConfig',
+    'customer.apps.CustomerConfig',
 ]
+
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -76,7 +74,7 @@ DATABASES = {
             "USER": 'postgres',
             "PASSWORD": 'postgres',
             "HOST": 'localhost',
-            "PORT": 5432,
+            "PORT": 5433,
     }
 }
 
@@ -123,11 +121,13 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 LOGIN_URL = "customer:sign-in"
 LOGIN_REDIRECT_URL = "customer:index"

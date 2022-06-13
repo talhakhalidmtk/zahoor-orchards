@@ -3,11 +3,13 @@ from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views import View
-from admin_panel.models import Client, Property, File
+from admin_panel.models import Client, Property, File, Agent
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
 
-from admin_panel.forms import ClientForm, PropertyForm, FileForm, PaymentForm
+from admin_panel.forms import ClientForm, PropertyForm, FileForm, PaymentForm, AgentForm
+
+
 
 def index(request: HttpRequest) -> HttpResponse:
     return render(request, "admin/index.html")
@@ -18,6 +20,47 @@ def account(request: HttpRequest) -> HttpResponse:
 class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
+
+
+
+class AgentView(TemplateView):
+    template_name = "admin/agent.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['agent_data'] = Agent.objects.all()
+        context['agent_form'] = AgentForm()
+        return context
+    
+    def post(self, request):
+        form = AgentForm(request.POST, request.FILES)
+        if form.is_valid() and not Agent.objects.filter(cnic=form.cleaned_data['cnic']).exists():
+           form.save()
+        else:
+            messages.info(request, form.errors)
+        return HttpResponseRedirect(self.request.path_info)
+
+class AgentViewDelete(RedirectView):
+    url = "/admin/agents"
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.path_info
+        Agent.objects.get(cnic=kwargs['cnic']).delete()
+        return super().get_redirect_url(*args, **kwargs)
+
+def updateAgent(request, cnic):
+    agent = Agent.objects.get(cnic=cnic)
+    form = AgentForm(instance=agent)
+    context={'agent_form': form, 'agent_data':Agent.objects.all()}
+
+    if request.method == 'POST':
+        form = AgentForm(request.POST,request.FILES, instance=agent)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Updated Successfully')
+            return redirect('/admin/agents')
+
+    return render(request, 'admin/agent.html', context)
+
 
 class ClientView(TemplateView):
     template_name = "admin/client.html"
@@ -75,15 +118,8 @@ class PropertyView(TemplateView):
     
     def post(self, request):
         form = PropertyForm(request.POST)
-        if form.is_valid() and not Property.objects.filter(plot=form.cleaned_data['plot']).exists():
-            pl = form.cleaned_data['plot']
-            si = form.cleaned_data['size']
-            bl = form.cleaned_data['block']
-            am = form.cleaned_data['amount']
-            cat = form.cleaned_data['category']
-            st = form.cleaned_data['status']
-            property = Property(plot=pl, size=si, block=bl, amount=am, category = cat, status=st)
-            property.save()
+        if form.is_valid() and not Property.objects.filter(name=form.cleaned_data['name']).exists():
+            form.save()
         else:
             messages.info(request, 'This Property already exists!')
         return HttpResponseRedirect(self.request.path_info)
@@ -115,13 +151,14 @@ class FileView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
-        context['file_data'] = File.objects.all()
+        context['file_data'] = File.objects.all().order_by('file')
         context['file_form'] = FileForm()
+        context['total'] = countTotal()
         return context
     
     def post(self, request):
         form = FileForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and not File.objects.filter(file=form.cleaned_data['file']).exists() and not File.objects.filter(property=form.cleaned_data['property']).exists():
             fi = form.cleaned_data['file']
             ag = form.cleaned_data['agent']
             cl = Client.objects.get(name=form.cleaned_data['client'].name, cnic = form.cleaned_data['client'].cnic)
@@ -129,7 +166,26 @@ class FileView(TemplateView):
             st = form.cleaned_data['status']
             property = File(file=fi, agent=ag, client=cl, property=pr, status = st, payment = [])
             property.save()
-            return HttpResponseRedirect(self.request.path_info)
+        else:
+            messages.info(request, 'ERROR!')
+        return HttpResponseRedirect(self.request.path_info)
+        
+        
+def countTotal():
+    val = File.objects.all().order_by('file')
+    re = []
+    for va in val:
+        sum=0
+        for pa in va.payment:
+            sum += int(pa[1])
+        re.append([sum,int(va.property.amount)-int(sum)])
+    print(re)
+    return re
+
+
+
+
+
 
 class FileViewDelete(RedirectView):
     url = "/admin/file"
@@ -169,3 +225,4 @@ def updateFile(request, file):
         
 
     return render(request, 'admin/file.html', context)
+

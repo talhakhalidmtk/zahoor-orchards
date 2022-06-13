@@ -1,7 +1,8 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
-
 from admin_panel import views
+
+
 
 app_name="admin_panel"
 
@@ -21,6 +22,10 @@ urlpatterns = [
     path("deletefile/<str:file>/", views.FileViewDelete.as_view(), name="deleteFile"),
     path("updatefile/<str:file>", views.updateFile, name="updateFile"),
     path("updatepayment/<str:file>", views.updatePayment, name="updatePayment"),
+
+    path("agents/", views.AgentView.as_view(), name="agents"),
+    path("deleteagent/<str:cnic>/", views.AgentViewDelete.as_view(), name="deleteAgent"),
+    path("updateagent/<str:cnic>", views.updateAgent, name="updateAgent"),
 
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 ]

@@ -37,29 +37,29 @@
       <div class="col-sm-12 section-t6">
         <div class="row">
           <div class="col-md-6 mx-auto">
-            <form class="form-a form-sign-in contactForm" action="" method="post">
+            <form class="form-a form-sign-in contactForm" action="{{sign_in_url}}" method="post">
               {% csrf_token %}
-              <div id="sendmessage">Your message has been sent. Thank you!</div>
-              <div id="errormessage"></div>
+
               <div class="row">
                 <div class="col-md-12 mb-3">
                   <div class="form-group">
                     <input type="username" name="username" class="form-control form-control-lg form-control-a"
                       placeholder="Username">
-                    <div class="validation"></div>
+
                   </div>
                 </div>
                 <div class="col-md-12 mb-3">
                   <div class="form-group">
                     <input name="password" type="password" class="form-control form-control-lg form-control-a"
-                      placeholder="Password" data-rule="password" data-msg="Incorrect Password">
-                    <div class="validation"></div>
+                      placeholder="Password">
+
                   </div>
                 </div>
                 <div class="col-md-12">
                   <button type="submit" class="btn btn-a">Sign In</button>
                 </div>
               </div>
+
             </form>
           </div>
         </div>

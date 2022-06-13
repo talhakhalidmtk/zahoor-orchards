@@ -1,5 +1,6 @@
 {% load static %}
 
+{% url 'customer:index' as customer_index_url %}
 {% url 'admin_panel:index' as index_url %}
 {% url 'customer:index' as customer_index_url %}
 {% url 'admin_panel:account' as account_url %}
@@ -9,6 +10,8 @@
 {% url 'admin_panel:property' as property_url %}
 {% url 'admin_panel:updatePayment' file as payment_url %}
 {% url 'admin_panel:updateFile' file as update_url %}
+{% url 'admin_panel:agents' as agent_url %}
+
 
 
 <!DOCTYPE html>
@@ -111,7 +114,28 @@
               <ul class="menu-sub {% if request.path == account_url %} active {% endif %}">
                 <li class="menu-item {% if request.path == account_url %} active {% endif %}">
                   <a href="{{account_url}}" class="menu-link">
-                    <div data-i18n="Account">Account</div>
+                    <div data-i18n="Account">Admin</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Account">User</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Agent Section</span>
+            </li>
+            <li class="menu-item {% if request.path == agent_url %} active {% endif %}">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div>Agent Details</div>
+              </a>
+              <ul class="menu-sub {% if request.path == agent_url %} active {% endif %}">
+                <li class="menu-item {% if request.path == agent_url %} active {% endif %}">
+                  <a href="{{agent_url}}" class="menu-link">
+                    <div>Agents</div>
                   </a>
                 </li>
               </ul>

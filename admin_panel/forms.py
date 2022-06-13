@@ -1,4 +1,5 @@
-from admin_panel.models import Client, Property, File
+from admin_panel.models import Client, Property, File, Agent
+from django.core.validators import RegexValidator
 from django import forms
 
 status =(
@@ -20,6 +21,20 @@ file_status =(
     ("Canceled", "Canceled"),
 )
 
+class AgentForm(forms.ModelForm):
+    class Meta:
+        model = Agent
+        fields = ('name', 'guardian', 'contact', 'cnic', 'image')
+    def __init__(self, *args, **kwargs):
+        super(AgentForm, self).__init__(*args, **kwargs)
+        self.fields['contact'].widget.attrs.update({'pattern':"[0-9]{4}-[0-9]{7}"})
+        self.fields['cnic'].widget.attrs.update({'pattern':"[0-9]{5}-[0-9]{7}-[0-9]{1}"})
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs.update({'id': field})
+            self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..." 
+
+
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
@@ -37,7 +52,7 @@ class ClientForm(forms.ModelForm):
 class PropertyForm(forms.ModelForm):
     class Meta:
         model = Property
-        fields = ('plot', 'size', 'block', 'amount', 'category', 'status')
+        fields = ('plot','name', 'size', 'block', 'amount', 'category', 'status')
     def __init__(self, *args, **kwargs):
         super(PropertyForm, self).__init__(*args, **kwargs)
         self.fields['category'] = forms.ChoiceField(label="Category...", choices=category)
@@ -54,7 +69,8 @@ class FileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FileForm, self).__init__(*args, **kwargs)
         self.fields['client'].empty_label = 'Client...'
-        self.fields['property'].empty_label = 'Plot - Size - Block - Category...'
+        self.fields['property'].empty_label = 'Plot...'
+        self.fields['agent'].empty_label = 'Agent...'
         self.fields['status'] = forms.ChoiceField(label="Status...", choices=file_status)
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
@@ -68,7 +84,7 @@ class PaymentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PaymentForm, self).__init__(*args, **kwargs)
         self.fields['client'].empty_label = 'Client...'
-        self.fields['property'].empty_label = 'Plot - Size - Block - Category...'
+        self.fields['property'].empty_label = 'Plot...'
         self.fields['payment_details'] = forms.CharField()
         self.fields['amount'] = forms.CharField()
         for field in self.fields:
