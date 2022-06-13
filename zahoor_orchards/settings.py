@@ -131,7 +131,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "customer:sign-in"
-LOGIN_REDIRECT_URL = "customer:index"
+LOGIN_REDIRECT_URL = "admin_panel:index"
 LOGOUT_REDIRECT_URL = "customer:index"
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
