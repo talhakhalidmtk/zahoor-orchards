@@ -39,7 +39,7 @@ class AgentView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
             messages.info(request, form.errors)
         return HttpResponseRedirect(self.request.path_info)
 
-class AgentViewDelete(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
+class AgentViewDelete(RedirectView):
     url = "/admin/agents"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
@@ -85,7 +85,7 @@ class ClientView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
             messages.info(request, 'This User already exists!')
         return HttpResponseRedirect(self.request.path_info)
 
-class ClientViewDelete(RedirectView, LoginRequiredMixin, SuperuserRequiredMixin):
+class ClientViewDelete(RedirectView):
     url = "/admin/clients"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
@@ -125,7 +125,7 @@ class PropertyView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
             messages.info(request, 'This Property already exists!')
         return HttpResponseRedirect(self.request.path_info)
 
-class PropertyViewDelete(RedirectView, LoginRequiredMixin, SuperuserRequiredMixin):
+class PropertyViewDelete(RedirectView):
     url = "/admin/property"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
@@ -183,7 +183,7 @@ def countTotal():
     print(re)
     return re
 
-class FileViewDelete(RedirectView, LoginRequiredMixin, SuperuserRequiredMixin):
+class FileViewDelete(RedirectView):
     url = "/admin/file"
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.path_info
