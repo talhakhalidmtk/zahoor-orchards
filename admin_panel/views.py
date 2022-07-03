@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views import View
+from accounts.models import User
 from admin_panel.models import Client, Property, File, Agent
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
@@ -36,7 +37,7 @@ class AgentView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
         if form.is_valid() and not Agent.objects.filter(cnic=form.cleaned_data['cnic']).exists():
            form.save()
         else:
-            messages.info(request, form.errors)
+            messages.error(request, form.errors)
         return HttpResponseRedirect(self.request.path_info)
 
 class AgentViewDelete(RedirectView):
@@ -62,6 +63,22 @@ def updateAgent(request, cnic):
     return render(request, 'admin/agent.html', context)
 
 
+class UserView(TemplateView):
+    template_name = "admin/users.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['data'] = User.objects.all()
+        return context
+
+class UserViewDelete(RedirectView):
+    url = "/admin/users"
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.path_info
+        instance = get_object_or_404(User, cnic=kwargs['cnic']) 
+        instance.delete() 
+        return super().get_redirect_url(*args, **kwargs)
+
 class ClientView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
     template_name = "admin/client.html"
 
@@ -82,7 +99,7 @@ class ClientView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
             client = Client(name=nm, guardian=gu, contact=co, cnic=cn, status = st)
             client.save()
         else:
-            messages.info(request, 'This User already exists!')
+            messages.error(request, 'This User already exists!')
         return HttpResponseRedirect(self.request.path_info)
 
 class ClientViewDelete(RedirectView):
@@ -122,7 +139,7 @@ class PropertyView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
         if form.is_valid() and not Property.objects.filter(name=form.cleaned_data['name']).exists():
             form.save()
         else:
-            messages.info(request, 'This Property already exists!')
+            messages.error(request, 'This Property already exists!')
         return HttpResponseRedirect(self.request.path_info)
 
 class PropertyViewDelete(RedirectView):
@@ -162,14 +179,15 @@ class FileView(LoginRequiredMixin, SuperuserRequiredMixin,TemplateView):
         form = FileForm(request.POST)
         if form.is_valid() and not File.objects.filter(file=form.cleaned_data['file']).exists() and not File.objects.filter(property=form.cleaned_data['property']).exists():
             fi = form.cleaned_data['file']
+            fi2 = form.cleaned_data['new_file']
             ag = form.cleaned_data['agent']
             cl = Client.objects.get(name=form.cleaned_data['client'].name, cnic = form.cleaned_data['client'].cnic)
             pr = Property.objects.get(plot=form.cleaned_data['property'].plot)
             st = form.cleaned_data['status']
-            property = File(file=fi, agent=ag, client=cl, property=pr, status = st, payment = [])
+            property = File(file=fi,new_file=fi2, agent=ag, client=cl, property=pr, status = st, payment = [])
             property.save()
         else:
-            messages.info(request, 'ERROR!')
+            messages.error(request, 'ERROR in file creation!')
         return HttpResponseRedirect(self.request.path_info)
         
 def countTotal():

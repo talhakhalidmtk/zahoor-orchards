@@ -1,0 +1,17 @@
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+    {{message}}
+    <button type="button" class="btn-close alert-button" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+</hr>
+{% elif message.tags == "info" %}
+<div class="alert alert-success alert-dismissible" role="alert">
+    {{message}}
+    <button type="button" class="btn-close alert-button" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+</hr>
+{% endif %}
+{% endfor %}
+{% endif %}

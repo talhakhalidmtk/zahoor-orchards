@@ -7,11 +7,18 @@ status =(
 )
 
 category =(
+    ("General", "General"),
+    ("Boulevard", "Boulevard"),
     ("Corner", "Corner"),
+    ("Facing Park", "Facing Park"),
+    ("Corner Boulevard", "Corner Boulevard"),
+    ("Corner Facing Park", "Corner Facing Park"),
 )
 
 property_status =(
     ("In Progress", "In Progress"),
+    ("Dispute", "Dispute"),
+    ("Completed", "Completed"),
 )
 
 file_status =(
@@ -65,7 +72,7 @@ class PropertyForm(forms.ModelForm):
 class FileForm(forms.ModelForm):
     class Meta:
         model = File
-        fields = ('file', 'agent','client','property', 'status')
+        fields = ('file','new_file', 'agent','client','property', 'status')
     def __init__(self, *args, **kwargs):
         super(FileForm, self).__init__(*args, **kwargs)
         self.fields['client'].empty_label = 'Client...'
@@ -73,9 +80,19 @@ class FileForm(forms.ModelForm):
         self.fields['agent'].empty_label = 'Agent...'
         self.fields['status'] = forms.ChoiceField(label="Status...", choices=file_status)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-            self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..."
-            self.fields[field].widget.attrs.update({'id': field})
+            if field == "file":
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
+                self.fields[field].widget.attrs['placeholder'] = "FILE NUMBER" + "..."
+                self.fields[field].widget.attrs.update({'id': field})
+            elif field == "new_file":
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
+                self.fields[field].widget.attrs['placeholder'] = "NEW FILE NUMBER" + "..."
+                self.fields[field].widget.attrs.update({'id': field})
+            else:
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
+                self.fields[field].widget.attrs['placeholder'] = field.capitalize() + "..."
+                self.fields[field].widget.attrs.update({'id': field})
+        
 
 class PaymentForm(forms.ModelForm):
     class Meta:

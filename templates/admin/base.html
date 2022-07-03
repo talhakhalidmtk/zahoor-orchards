@@ -7,6 +7,7 @@
 {% url 'admin_panel:file' as file_url %}
 {% url 'admin_panel:logout' as logout_url %}
 {% url 'admin_panel:clients' as client_url %}
+{% url 'admin_panel:users' as user_url %}
 {% url 'admin_panel:property' as property_url %}
 {% url 'admin_panel:updatePayment' file as payment_url %}
 {% url 'admin_panel:updateFile' file as update_url %}
@@ -118,7 +119,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{{user_url}}" class="menu-link">
                     <div data-i18n="Account">User</div>
                   </a>
                 </li>

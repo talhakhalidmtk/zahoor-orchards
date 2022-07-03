@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'admin_panel.apps.AdminPanelConfig',
     'customer.apps.CustomerConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 
@@ -130,7 +131,9 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = "customer:sign-in"
+AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_URL = "accounts:sign_in"
 LOGIN_REDIRECT_URL = "admin_panel:index"
 LOGOUT_REDIRECT_URL = "customer:index"
 

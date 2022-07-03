@@ -36,6 +36,7 @@ class Property(models.Model):
 
 class File(models.Model):  
     file = models.CharField(max_length=30, primary_key=True, unique=True)
+    new_file = models.CharField(max_length=30, unique=True)
     agent = models.ForeignKey(Agent, max_length=30, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, max_length=30, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, max_length=30, on_delete=models.CASCADE)

@@ -27,5 +27,8 @@ urlpatterns = [
     path("deleteagent/<str:cnic>/", views.AgentViewDelete.as_view(), name="deleteAgent"),
     path("updateagent/<str:cnic>", views.updateAgent, name="updateAgent"),
 
+    path("users/", views.UserView.as_view(), name="users"),
+    path("deleteuser/<str:cnic>/", views.UserViewDelete.as_view(), name="deleteUser"),
+
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 ]

@@ -40,8 +40,8 @@
     {% url 'customer:contact' as contact_url %}
     {% url 'customer:property' as property_url %}
     {% url 'customer:property-single' as property_single_url %}
-    {% url 'customer:sign-in' as sign_in_url %}
-    {% url 'customer:sign-up' as sign_up_url %}
+    {% url 'accounts:sign_in' as sign_in_url %}
+    {% url 'accounts:sign_up' as sign_up_url %}
     {% url 'admin_panel:logout' as logout_url %}
 
     {% include 'customer/navbar.html' %}

@@ -36,37 +36,24 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-12 section-t6">
+        {% include 'alert.html' %}
         <div class="row">
           <div class="col-md-6 mx-auto">
             <form class="form-a form-sign-in contactForm" action="" method="post" role="form">
               {% csrf_token %}
-              {{ form.as_p }}
-              <!-- <div id="sendmessage">Your message has been sent. Thank you!</div>
-              <div id="errormessage"></div>
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <div class="form-group">
-                    <input type="email" name="email" class="form-control form-control-lg form-control-a"
-                      placeholder="Email" data-rule="email" data-msg="Incorrect Email">
-                    <div class="validation"></div>
-                  </div>
+              {% for field in form %}
+              <div class="col-md-12 mb-3">
+                <div class="form-group">
+                  {{field}}
+                  {% if field.name == 'contact' %}
+                  <small>Format: 0300-0000000</small>
+                  {% elif field.name == 'cnic' %}
+                  <small>Format: 00000-0000000-0</small>
+                  {% endif %}
                 </div>
-                <div class="col-md-12 mb-3">
-                  <div class="form-group">
-                    <input name="password" type="password" class="form-control form-control-lg form-control-a"
-                      placeholder="Password" data-rule="password" data-msg="Incorrect Password">
-                    <div class="validation"></div>
-                  </div>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <div class="form-group">
-                    <input name="password" type="password" class="form-control form-control-lg form-control-a"
-                      placeholder="Confirm Password" data-rule="password" data-msg="Incorrect Password">
-                    <div class="validation"></div>
-                  </div>
-                </div>
-                
-              </div> -->
+              </div>
+              {% endfor %}
+
               <div class="col-md-12">
                 <button type="submit" class="btn btn-a">Sign Up</button>
               </div>

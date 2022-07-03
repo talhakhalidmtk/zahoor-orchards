@@ -12,10 +12,4 @@ urlpatterns = [
     path('contact/', views.contact, name="contact"),
     path('property/', views.property, name="property"),
     path('property-single/', views.property_single, name="property-single"),
-    path(
-        "sign-in/",
-        auth_views.LoginView.as_view(template_name="customer/sign-in.html"),
-        name="sign-in",
-    ),
-    
 ]

@@ -19,9 +19,17 @@
   text-transform: lowercase;
 }
 
+@media screen and (min-width: 1200px) {
+  .table_scroll {
+    overflow-x: hidden;
+  }
+}
+
 /* ! For .layout-navbar-fixed added fix padding top tpo .layout-page */
 /* Detached navbar */
-.layout-navbar-fixed .layout-wrapper:not(.layout-horizontal):not(.layout-without-menu) .layout-page {
+.layout-navbar-fixed
+  .layout-wrapper:not(.layout-horizontal):not(.layout-without-menu)
+  .layout-page {
   padding-top: 76px !important;
 }
 /* Default navbar */
@@ -77,8 +85,25 @@
   direction: ltr !important;
 }
 
-[dir='rtl'] .rtl-only {
+[dir="rtl"] .rtl-only {
   display: block !important;
+}
+
+.search-bar {
+  right: 1rem;
+  margin-bottom: 0px;
+  padding-left: 30px;
+  width: 25%;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #f7f7f7;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #7a7a7a;
+  padding: 0px 15px;
 }
 
 /*
