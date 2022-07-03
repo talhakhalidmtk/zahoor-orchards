@@ -112,13 +112,13 @@
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account Settings">Account Settings</div>
               </a>
-              <ul class="menu-sub {% if request.path == account_url %} active {% endif %}">
-                <li class="menu-item {% if request.path == account_url %} active {% endif %}">
+              <ul class="menu-sub {% if request.path == user_url%} active {% endif %}">
+                <!-- <li class="menu-item {% if request.path == account_url %} active {% endif %}">
                   <a href="{{account_url}}" class="menu-link">
                     <div data-i18n="Account">Admin</div>
                   </a>
-                </li>
-                <li class="menu-item">
+                </li> -->
+                <li class="menu-item {% if request.path == user_url%} active {% endif %}">
                   <a href="{{user_url}}" class="menu-link">
                     <div data-i18n="Account">User</div>
                   </a>
